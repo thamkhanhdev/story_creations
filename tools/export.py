@@ -12,7 +12,7 @@ def save_to_pdf(input_txt, output_pdf, title):
 
     with open(input_txt, "r", encoding="utf-8") as f:
         for i, line in enumerate(f, start=1):
-            pdf.multi_cell(0, 10, line)
+            pdf.multi_cell(0, 5, line)
             if i % 1000 == 0:
                 print(f"\033[92m[LOG] Finished exporting {i} lines...\033[0m")
 
