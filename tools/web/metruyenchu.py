@@ -55,7 +55,7 @@ with open(file_name, "w", encoding="utf-8") as f:
             else:
                 url = next_url
             chapter_num += 1
-            time.sleep(0.01)
+            time.sleep(0.05)
         else:
             print("OK")
             break
