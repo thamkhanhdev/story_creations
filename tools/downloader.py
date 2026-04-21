@@ -16,14 +16,10 @@ os.makedirs(f"story/{story_name}", exist_ok=True)
 file_name = f"story/{story_name}/{story_name}.txt"
 
 result = None
-if "metruyenchu" in url:
-    result = subprocess.run(["python", "tools/web/metruyenchu.py", url, story_name, file_name])
-elif "wikicv.net" in url:
-    result = subprocess.run(["python", "tools/web/wikicv.py", url, story_name, file_name])
+for site_key, base_url in variables.BASE_URLS.items():
+    if site_key in url:
+        result = subprocess.run(["python", f"tools/web/{site_key}.py", url, story_name, file_name])
+        break
 else:
     print("\033[93mUnsupported site\033[0m")
-
-if result is not None and result.returncode == 0:
-    subprocess.run(["python", "tools/export.py", story_name])
-elif result is not None:
-    print(f"\033[91m[ERROR] Download process failed with return code {result.returncode}. Skipping export.\033[0m")
+    sys.exit(1)

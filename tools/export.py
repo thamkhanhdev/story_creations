@@ -28,5 +28,5 @@ if __name__ == "__main__":
     input_txt = f"story/{story_name}/{story_name}.txt"
     output_pdf = f"story/{story_name}/{story_name}.pdf"
 
-    print(f"\033[92m[LOG] Starting export of {input_txt} to {output_pdf}\033[0m")
+    print(f"\033[92m[LOG] Starting export of {story_name}.txt to {story_name}.pdf\033[0m")
     save_to_pdf(input_txt, output_pdf, story_name)

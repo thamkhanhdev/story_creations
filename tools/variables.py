@@ -10,18 +10,21 @@ headers = {
 
 BASE_URLS = {
     "metruyenchu": "https://metruyenchu.com.vn",
-    "wikicv": "https://wikicv.net"
+    "wikicv": "https://wikicv.net",
+    "metruyenhot": "https://metruyenhot.me"
 }
+
+_DOMAIN_TO_BASE = {base.replace("https://", ""): base for base in BASE_URLS.values()}
 
 def extract_story_slug(url):
     """Extract story slug from URL"""
-    m = re.search(r"https?://(?:wikicv\.net/truyen|metruyenchu\.com\.vn)/([^/]+)/", url)
+    # Build pattern from BASE_URLS for maintainability
+    domains = "|".join(BASE_URLS.values()).replace("https://", "").replace(".", r"\.")
+    pattern = rf"https?://(?:{domains})/(?:truyen/)?([^/]+)/"
+    m = re.search(pattern, url)
     return m.group(1) if m else None
 
 def get_base_url(url):
     """Get appropriate base URL based on domain"""
-    if "metruyenchu" in url:
-        return BASE_URLS["metruyenchu"]
-    elif "wikicv.net" in url:
-        return BASE_URLS["wikicv"]
-    return None
+    domain = urlparse(url).netloc
+    return _DOMAIN_TO_BASE.get(domain)
