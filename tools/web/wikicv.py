@@ -18,12 +18,12 @@ sys.path.insert(0, parent_dir)
 import variables
 
 if len(sys.argv) < 4:
-    print("\033[93mUsage: python wikicv.py <start_url> <story_name> <file_name>\033[0m")
+    print("\033[93mUsage: python wikicv.py <start_url> <story_name> <story_dir>\033[0m")
     sys.exit(1)
 
 start_url = sys.argv[1]
 story_name = sys.argv[2]
-file_name = sys.argv[3]
+story_dir = sys.argv[3]
 base_url = variables.BASE_URLS["wikicv"]
 
 # Register Vietnamese font (adjust path if needed)
@@ -46,7 +46,8 @@ except:
     font_name_bold = "Arial-Bold"
 
 # Create PDF doc
-pdf_file = file_name.replace(".txt", ".pdf")
+pdf_file = f"{story_dir}\\{story_name}.pdf"
+txt_file = f"{story_dir}\\backup\\{story_name}.txt"
 doc = SimpleDocTemplate(pdf_file, pagesize=A4, topMargin=0.5*cm, bottomMargin=0.5*cm)
 story = []
 
@@ -72,7 +73,7 @@ content_style = ParagraphStyle(
 )
 
 # Also write TXT file
-with open(file_name, "w", encoding="utf-8") as txt_f:
+with open(txt_file, "w", encoding="utf-8") as txt_f:
     url = start_url
     chapter_num = 1
 
@@ -140,13 +141,13 @@ with open(file_name, "w", encoding="utf-8") as txt_f:
                 print(f"\033[91m[ERROR] Next button found but no href, stopping.\033[0m")
                 break
         elif previous_button and not next_button:
-            print("Done")
+            print("\033[36m--> DONE!! No next button, but previous button exists. Assuming last chapter reached.\033[0m")
             break
         else:
             print(f"\033[91m[ERROR] No next button found, stopping.\033[0m")
             break
 
-print(f"\033[92mFinished saving story to {file_name}\033[0m")
+print(f"\033[92mFinished saving story to {txt_file}\033[0m")
 
 # Build PDF
 try:
