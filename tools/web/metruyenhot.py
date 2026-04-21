@@ -28,18 +28,26 @@ base_url = variables.BASE_URLS["metruyenhot"]
 
 # Register Vietnamese font (adjust path if needed)
 try:
-    font_path = os.path.join(os.path.dirname(__file__), "../../font/DejaVuSans.ttf")
+    font_path = os.path.join(os.path.dirname(__file__), "../font/DejaVuSans.ttf")
     if os.path.exists(font_path):
         pdfmetrics.registerFont(TTFont("DejaVu", font_path))
         font_name = "DejaVu"
     else:
-        font_name = "Helvetica"
+        font_name = "Arial"
+
+    font_path_bold = os.path.join(os.path.dirname(__file__), "../font/DejaVuSans-Bold.ttf")
+    if os.path.exists(font_path_bold):
+        pdfmetrics.registerFont(TTFont("DejaVu-Bold", font_path_bold))
+        font_name_bold = "DejaVu-Bold"
+    else:
+        font_name_bold = "Arial-Bold"
 except:
-    font_name = "Helvetica"
+    font_name = "Arial"
+    font_name_bold = "Arial-Bold"
 
 # Create PDF doc
 pdf_file = file_name.replace(".txt", ".pdf")
-doc = SimpleDocTemplate(pdf_file, pagesize=A4, topMargin=1*cm, bottomMargin=1*cm)
+doc = SimpleDocTemplate(pdf_file, pagesize=A4, topMargin=0.5*cm, bottomMargin=0.5*cm)
 story = []
 
 # Define styles
@@ -50,7 +58,7 @@ title_style = ParagraphStyle(
     fontSize=16,
     textColor="#000000",
     spaceAfter=12,
-    fontName=f"{font_name}-Bold",
+    fontName=f"{font_name_bold}",
     alignment=1  # Center alignment
 )
 content_style = ParagraphStyle(
@@ -74,7 +82,7 @@ with open(file_name, "w", encoding="utf-8") as txt_f:
             r = requests.get(url, headers=variables.headers)
             if r.status_code == 200:
                 break
-            time.sleep(0.05)
+            time.sleep(0.5)
         if r.status_code != 200:
             print(f"\033[91m[LOG] Server error at {url}, skipping.\033[0m")
             break
@@ -101,9 +109,10 @@ with open(file_name, "w", encoding="utf-8") as txt_f:
                 txt_f.write(line + "\n")
 
         # Add to PDF
-        story.append(PageBreak())  # New page for each chapter
+        if chapter_num > 1:
+            story.append(PageBreak())  # New page for each chapter
         story.append(Paragraph(title, title_style))
-        story.append(Spacer(1, 0.3*cm))
+        story.append(Spacer(0.5, 0.3*cm))
 
         # Split content into paragraphs
         for para_text in text.split("\n"):
