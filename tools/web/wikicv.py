@@ -114,22 +114,36 @@ with open(file_name, "w", encoding="utf-8") as txt_f:
             if para_text:
                 story.append(Paragraph(para_text.replace("\n", "<br/>"), content_style))
 
-        next_button = None
-        for a in soup.find_all("a", class_="btn-bot"):
-            if "Chương sau" in a.get_text():
-                next_button = a
-                break
-
-        if next_button and next_button.get("href") and next_button["href"] != "#":
-            next_url = next_button["href"]
-            if next_url.startswith("/"):
-                url = base_url + next_url
-            else:
-                url = next_url
-            chapter_num += 1
-            time.sleep(0.05)
+        previous_button = soup.find("a", id="btnPreChapter")
+        next_button = soup.find("a", id="btnNextChapter")
+        # print("[DEBUG] next_button:", next_button)
+        if chapter_num > 1 and not previous_button:
+            condition_pre_button = False
         else:
-            print("OK")
+            condition_pre_button = True
+
+        if next_button and condition_pre_button:
+            if next_button.get("href"):
+                next_url = next_button["href"].strip()
+                if next_url and not next_url.startswith("#"):
+                    if next_url.startswith("/"):
+                        url = base_url + next_url
+                    else:
+                        url = next_url
+                    chapter_num += 1
+                    time.sleep(0.05)
+                    # print(f"[LOG] --> Next URL: {url}")
+                else:
+                    print("[LOG] --> No valid next_url")
+                    break
+            else:
+                print(f"\033[91m[ERROR] Next button found but no href, stopping.\033[0m")
+                break
+        elif previous_button and not next_button:
+            print("Done")
+            break
+        else:
+            print(f"\033[91m[ERROR] No next button found, stopping.\033[0m")
             break
 
 print(f"\033[92mFinished saving story to {file_name}\033[0m")
