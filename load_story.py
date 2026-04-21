@@ -1,5 +1,6 @@
 import subprocess
 import sys
+import time
 
 def main():
     if len(sys.argv) > 1:
@@ -18,8 +19,12 @@ def main():
                     link = link.strip()
                     if link:  # Skip empty lines
                         print(f"\033[92mProcessing link: {link}\033[0m")
+                        start = time.time()
+                        print(f"\033[96m[LOG] Time started: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(start))}\033[0m")
                         subprocess.run(["python", "tools/downloader.py", link])
-                        print(f"\033[94mFinished processing link: {link}\033[0m\n")
+                        end = time.time()
+                        print(f"\033[96m[LOG] Time end: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(end))}\033[0m")
+                        print(f"\033[94mFinished processing link: {link} in {end - start:.2f} seconds\033[0m\n")
         except FileNotFoundError:
             print("\033[93mWarning: File 'links' not found.\033[0m")
         except Exception as e:

@@ -127,9 +127,11 @@ with open(file_name, "w", encoding="utf-8") as txt_f:
             url = base_url + url
         chapter_num += 1
 
+print(f"\033[92mFinished saving story to {file_name}\033[0m")
+
 # Build PDF
 try:
     doc.build(story)
-    print(f"\033[92m[LOG] PDF created: {pdf_file}\033[0m")
+    print(f"\033[35m[LOG] PDF created: {pdf_file}\033[0m")
 except Exception as e:
     print(f"\033[91m[ERROR] Failed to create PDF: {e}\033[0m")
