@@ -147,7 +147,7 @@ with open(txt_file, "w", encoding="utf-8") as txt_f:
             print(f"\033[91m[ERROR] No next button found, stopping.\033[0m")
             break
 
-print(f"\033[92mFinished saving story to {txt_file}\033[0m")
+print(f"Finished saving story to {txt_file}")
 
 # Build PDF
 try:
