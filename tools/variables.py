@@ -11,7 +11,8 @@ headers = {
 BASE_URLS = {
     "metruyenchu": "https://metruyenchu.com.vn",
     "wikicv": "https://wikicv.net",
-    "metruyenhot": "https://metruyenhot.me"
+    "metruyenhot": "https://metruyenhot.me",
+    "truyenfull": "https://truyenfull.vision"
 }
 
 _DOMAIN_TO_BASE = {base.replace("https://", ""): base for base in BASE_URLS.values()}
